@@ -15,9 +15,9 @@ export default function App() {
   ]
   const [timeLeft, setTimeLeft] = useState(25 * 60);
   const [isRunning, setIsRunning] = useState(false);
-
   const [tasks, setTasks] = useState(initialTasks);
-  const [newTaskName, setNewTaskName] = useState("")
+  const [newTaskName, setNewTaskName] = useState("");
+  const [showForm, setShowForm] = useState(false);
 
   function handleSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -62,14 +62,48 @@ export default function App() {
         </div>
         <div className="flex flex-col gap-3">
           {tasks.map((task) => {
-            return (<div key={task.id} className="p-5 border">{task.name}</div>)
+            return (
+              <div key={task.id} className="p-5 border border-black">
+                {task.name}
+              </div>
+            );
           })}
-          <div className="p-5 border outline-dashed text-center">add task</div>
-          <form onSubmit={handleSubmit}>
-            <input onChange={(e) => setNewTaskName(e.target.value)} value={newTaskName} type="text" />
-            <button>cancel</button>
-            <button type="submit">save</button>
-          </form>
+          {showForm ? 
+            <form onSubmit={handleSubmit} className="p-3 border">
+              <div>
+                <input
+                  onChange={(e) => setNewTaskName(e.target.value)}
+                  value={newTaskName}
+                  type="text"
+                  placeholder="What are you working on?"
+                  className="black w-full"
+                />
+              </div>
+              <div className="my-5">
+                <span className="block mb-2">Est Pomodoros</span>
+                <input placeholder="1" type="number" min="0" step="1" className="w-1/12" />
+
+                <button type="button" className="ml-2 p-1 border">
+                  Up
+                </button>
+                <button type="button" className="ml-2 p-1 border">
+                  Down
+                </button>
+              </div>
+              <div className="flex justify-end">
+                <button onClick={() => setShowForm(false)} type="button" className="mr-2 p-3 border">
+                  cancel
+                </button>
+                <button type="submit" className="mr-2 p-3 border">
+                  save
+                </button>
+              </div>
+            </form>
+            :
+            <button onClick={() => setShowForm(true)} className="p-5 border outline-dashed text-center">
+              add task
+            </button>
+          }
         </div>
       </div>
       <div className="p-5 mt-10 border text-center">Stats finish</div>
