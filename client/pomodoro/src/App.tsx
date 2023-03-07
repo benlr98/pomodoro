@@ -5,27 +5,41 @@ import { v4 as uuidv4 } from "uuid";
 import Timer from "./Timer";
 
 interface TaskType {
+    _id?: string,
+    actPomodoro?: number,
+    done?: boolean,
     id: string,
-    order: number,
-    estimate: number,
-    name: string,
-    finished: boolean
+    userId?: string,
+    title: string,
+    estPomodoro?: number,
+    order?: number,
+    note?: string,
+    projectName?: string,
+    created?: Date, // handled by database
+    __v?: number, // handled by database
 }
 
 export default function App() {
-  const initialTasks = [
-    {
-      id: uuidv4(),
-      order: 1,
-      estimate: 1,
-      name: "task A",
-      finished: false
-    }
-  ]
+  // const initialTasks = [
+  //   {
+  //     _id: "6406163d3d0f0e3f4c033267",
+  //     actPomodoro: 2,
+  //     done: false,
+  //     id: "16781205090335",
+  //     userId: "60f981944a991342e4c8d7bb",
+  //     title: "Pomodoro code",
+  //     estPomodoro: 3,
+  //     order: 4,
+  //     note: "",
+  //     projectName: "",
+  //     created: "2023-03-06T16:35:09.838Z",
+  //     __v: 0,
+  //   },
+  // ];
   const [timeLeft, setTimeLeft] = useState(25 * 60);
   const [isRunning, setIsRunning] = useState(false);
-  const [tasks, setTasks] = useState(initialTasks);
-  const [newTaskName, setNewTaskName] = useState("");
+  const [tasks, setTasks] = useState<TaskType[]>([]);
+  const [newTaskTitle, setNewTaskTitle] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editTaskId, setEditTaskId] = useState<string | null>(null);
 
@@ -34,7 +48,7 @@ export default function App() {
 
   function handleTaskSubmit(taskId: string, event: React.SyntheticEvent) {
     event.preventDefault();
-    if(!newTaskName) return;
+    if(!newTaskTitle) return;
 
     let taskToEdit = tasks.find((task) => task.id === taskId) as undefined | TaskType;
 
@@ -45,13 +59,13 @@ export default function App() {
         id: taskId,
         order: 1,
         estimate: 1,
-        name: newTaskName,
+        title: newTaskTitle,
         finished: false,
       };
 
       const updatedTasks = tasks.map(task => {
         if(task.id === taskId) {
-          return {...task, name: newTaskName}
+          return {...task, title: newTaskTitle}
         } else {
           return task
         }
@@ -60,19 +74,16 @@ export default function App() {
 
       setTasks(updatedTasks);
       setEditTaskId(null);
-      setNewTaskName("");
+      setNewTaskTitle("");
 
     } else {
       let newTask = {
         id: taskId,
-        order: 1,
-        estimate: 1,
-        name: newTaskName,
-        finished: false,
+        title: newTaskTitle,
       };
   
       setTasks((prevTasks) => [...prevTasks, newTask])
-      setNewTaskName("");
+      setNewTaskTitle("");
     }
 
   }
@@ -84,11 +95,11 @@ export default function App() {
   }
 
   function cancelAddTask() {
-    if(newTaskName === "") {
+    if(newTaskTitle === "") {
       setShowForm(false);
       setEditTaskId(null);
     } else if (confirm("The input data will be lost. Are you sure you want to close it?")) {
-      setNewTaskName("");
+      setNewTaskTitle("");
       setShowForm(false);
       setEditTaskId(null);
     } 
@@ -127,8 +138,8 @@ export default function App() {
               <form ref={newTaskForm} key={task.id} onSubmit={(event) => handleTaskSubmit(task.id, event)} className="p-3 border">
                 <div>
                   <input
-                    onChange={(e) => setNewTaskName(e.target.value)}
-                    value={newTaskName || task.name}
+                    onChange={(e) => setNewTaskTitle(e.target.value)}
+                    value={newTaskTitle || task.title}
                     type="text"
                     placeholder="What are you working on?"
                     className="black w-full"
@@ -159,7 +170,7 @@ export default function App() {
               </form>
             ) : (
               <div key={task.id} className="p-5 flex justify-between items-center border border-black">
-                <span>{task.name}</span>
+                <span>{task.title}</span>
                 <button onClick={() => setEditTaskId(task.id)} className="p-1 border">
                   Edit
                 </button>
@@ -170,8 +181,8 @@ export default function App() {
             <form ref={newTaskForm} onSubmit={(event) => handleTaskSubmit(uuidv4(), event)} className="p-3 border">
               <div>
                 <input
-                  onChange={(e) => setNewTaskName(e.target.value)}
-                  value={newTaskName}
+                  onChange={(e) => setNewTaskTitle(e.target.value)}
+                  value={newTaskTitle}
                   type="text"
                   placeholder="What are you working on?"
                   className="black w-full"
