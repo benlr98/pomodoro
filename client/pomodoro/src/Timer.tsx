@@ -73,13 +73,18 @@ export default function Timer({ timeLeft, isRunning, setTimeLeft, setIsRunning }
         {formattedTime?.min}:{formattedTime?.sec}
       </h1>
       <div className="flex justify-center gap-3">
-        <button onClick={() => setIsRunning(false)} className="p-3 border">
-          Pause
-        </button>
-        <button onClick={() => setIsRunning(true)} className="p-3 border">
-          Start
-        </button>
-        <button className="p-3 border">Fast Track</button>
+        {isRunning ?
+          <>
+            <button onClick={() => setIsRunning(false)} className="p-3 border">
+              Pause
+            </button>
+            <button className="p-3 border">Fast Track</button>
+          </>
+          :
+          <button onClick={() => setIsRunning(true)} className="p-3 border">
+            Start
+          </button>
+        }
       </div>
     </div>
   );

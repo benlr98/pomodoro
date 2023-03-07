@@ -33,6 +33,13 @@ export default function App() {
     setNewTaskName("");
   }
 
+  function cancelAddTask() {
+    if(confirm("The input data will be lost. Are you sure you want to close it?")) {
+      setNewTaskName("");
+      setShowForm(false);
+    } 
+  }
+
 
   return (
     <div className="max-w-[620px] mx-auto px-3">
@@ -91,7 +98,7 @@ export default function App() {
                 </button>
               </div>
               <div className="flex justify-end">
-                <button onClick={() => setShowForm(false)} type="button" className="mr-2 p-3 border">
+                <button onClick={cancelAddTask} type="button" className="mr-2 p-3 border">
                   cancel
                 </button>
                 <button type="submit" className="mr-2 p-3 border">
