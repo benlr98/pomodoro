@@ -19,29 +19,34 @@ interface TaskType {
     __v?: number, // handled by database
 }
 
+interface DailyReportItem {
+  _id: "640748dda1cb3f65d8738934";
+  isClosed: false;
+  projectName: "UKG";
+  task: "Pomodoro code";
+  adjust: false;
+  startMinutes: 562;
+  endMinutes: 567;
+  sortKey: "20230307-1678199005649";
+  createdTS: 1678199005649;
+  userId: "60f981944a991342e4c8d7bb";
+  dateStr: "7-Mar-2023";
+  dateDigit: "20230307";
+  taskId: "16781205090335";
+  minutes: 5;
+  timezoneOffset: 300;
+  created: "2023-03-07T14:23:25.650Z";
+  __v: 0;
+}
+
 export default function App() {
-  // const initialTasks = [
-  //   {
-  //     _id: "6406163d3d0f0e3f4c033267",
-  //     actPomodoro: 2,
-  //     done: false,
-  //     id: "16781205090335",
-  //     userId: "60f981944a991342e4c8d7bb",
-  //     title: "Pomodoro code",
-  //     estPomodoro: 3,
-  //     order: 4,
-  //     note: "",
-  //     projectName: "",
-  //     created: "2023-03-06T16:35:09.838Z",
-  //     __v: 0,
-  //   },
-  // ];
   const [timeLeft, setTimeLeft] = useState(25 * 60);
   const [isRunning, setIsRunning] = useState(false);
   const [tasks, setTasks] = useState<TaskType[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [editTaskId, setEditTaskId] = useState<string | null>(null);
+  const [dailyReportItems, setDailyReportItems] = useState<DailyReportItem[]>([])
 
   const newTaskForm = useRef<HTMLFormElement>(null);
   useOnClickOutside(newTaskForm, cancelAddTask)
