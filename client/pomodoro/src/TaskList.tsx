@@ -2,6 +2,8 @@ import { useState, useRef } from "react";
 import { useOnClickOutside } from "./hooks/useOnClickOutside"
 import { v4 as uuidv4 } from "uuid";
 
+import Button from "./components/Button";
+
 
 type TaskType = {
   _id?: string;
@@ -17,8 +19,6 @@ type TaskType = {
   created?: Date; // handled by database
   __v?: number; // handled by database
 }
-
-
 
 interface TaskFormProps {
   editTaskId?: string,
@@ -109,33 +109,22 @@ export function TaskForm({ editTaskId, title, setShowForm, setTasks, tasks, remo
           placeholder="What are you working on?"
           className="black w-full"
           autoFocus
-          />
+        />
       </div>
       <div className="my-5">
         <span className="block mb-2">Est Pomodoros</span>
         <input placeholder="1" type="number" min="0" step="1" className="w-1/12" />
-        <button type="button" className="ml-2 p-1 border">
-          Up
-        </button>
-        <button type="button" className="ml-2 p-1 border">
-          Down
-        </button>
+        <Button size="sm">+</Button>
+        <Button size="sm">-</Button>
       </div>
       <div className="flex justify-end">
-        {
-          editTaskId ?
-            <button onClick={() => handleDelete(editTaskId)} type="button" className="mr-auto p-3 border">
-              delete
-            </button>
-          :
+        {editTaskId ? (
+          <Button onClick={() => handleDelete(editTaskId)} placeleft="true">Delete</Button>
+        ) : (
           ""
-        }
-        <button onClick={handleCancel} type="button" className="mr-2 p-3 border">
-          cancel
-        </button>
-        <button type="submit" className="mr-2 p-3 border">
-          save
-        </button>
+        )}
+        <Button onClick={handleCancel}>Cancel</Button>
+        <Button type={"submit"}>Save</Button>
       </div>
     </form>
   );
