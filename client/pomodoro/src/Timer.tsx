@@ -1,35 +1,66 @@
 import { useState, useMemo } from "react";
 import { useInterval } from "./hooks/useInterval";
+import Button from "./components/Button";
 
-type TimerProps = {
-  timeLeft: number,
-  isRunning: boolean,
-  setTimeLeft: Function,
-  setIsRunning: Function,
+interface TimerProps {
+  timeLeft: number;
+  setTimeLeft: Function;
+  increaseDailyPomos: Function;
 }
-
-export default function Timer({ timeLeft, isRunning, setTimeLeft, setIsRunning } : TimerProps) {
+export default function Timer({ timeLeft,  setTimeLeft, increaseDailyPomos} : TimerProps) {
+  const [isRunning, setIsRunning] = useState(false);
   const formattedTime = formatTime(timeLeft);
+
+  const timeSettings = {
+    pomodoro: 7,
+    shortBreak: 3,
+    longBreak: 5,
+  }
 
   useInterval(
     () => {
       setTimeLeft(timeLeft - 1);
+      if (timeLeft === 0) {
+        handleTimerEnd();
+      }
     },
     isRunning ? 1000 : null
   );
 
-  function formatTime(seconds: number) {
-    if (seconds <= 0) {
-      // handle whether short break or long break
-      setIsRunning(false);
-      setTimeLeft(1500);
+  
+
+  function handleTimerEnd() {
+    setIsRunning(false);
+
+    // TODO: only increase Pomos if pomodoro timer ends, not breaks 
+    increaseDailyPomos();
+
+    //TODO: handle whether short break or long break
+    // handleResetTimer()
+    setTimeLeft(timeSettings.pomodoro)
+
+    alert("Time has ended!")
+  }
+
+  function handleSkipToEnd() {
+    handleTimerEnd();
+  }
+
+  function formatTime(totalSeconds: number) {
+    
+    if (totalSeconds <= 0) {
       return { min: "00", sec: "00" };
     }
-    let minDisplay = Math.floor(seconds / 60).toString();
-    let secDisplay = (seconds % 60).toString();
+    
+    // type numbers
+    let minutes:number = Math.floor(totalSeconds / 60);
+    let seconds:number = totalSeconds % 60;
+    let minDisplay:string = minutes.toString();
+    let secDisplay:string = seconds.toString();
 
-    if (minDisplay === "0") {
-      minDisplay = "00";
+    // handle making 0 into 00
+    if (minutes < 10) {
+      minDisplay = "0" + minDisplay;
     }
     if (seconds % 60 < 10) {
       secDisplay = "0" + secDisplay;
@@ -43,7 +74,7 @@ export default function Timer({ timeLeft, isRunning, setTimeLeft, setIsRunning }
       <div className="mb-3 flex justify-center gap-2">
         <button
           onClick={() => {
-            setTimeLeft(25 * 60);
+            setTimeLeft(timeSettings.pomodoro);
             setIsRunning(false);
           }}
           className="p-3 border"
@@ -52,7 +83,7 @@ export default function Timer({ timeLeft, isRunning, setTimeLeft, setIsRunning }
         </button>
         <button
           onClick={() => {
-            setTimeLeft(5 * 60);
+            setTimeLeft(timeSettings.shortBreak);
             setIsRunning(false);
           }}
           className="p-3 border"
@@ -61,7 +92,7 @@ export default function Timer({ timeLeft, isRunning, setTimeLeft, setIsRunning }
         </button>
         <button
           onClick={() => {
-            setTimeLeft(15 * 60);
+            setTimeLeft(timeSettings.longBreak);
             setIsRunning(false);
           }}
           className="p-3 border"
@@ -73,18 +104,14 @@ export default function Timer({ timeLeft, isRunning, setTimeLeft, setIsRunning }
         {formattedTime?.min}:{formattedTime?.sec}
       </h1>
       <div className="flex justify-center gap-3">
-        {isRunning ?
+        {isRunning ? (
           <>
-            <button onClick={() => setIsRunning(false)} className="p-3 border">
-              Pause
-            </button>
-            <button className="p-3 border">Fast Track</button>
+            <Button onClick={() => setIsRunning(false)}>Pause</Button>
+            <Button onClick={handleSkipToEnd}>Skip To End</Button>
           </>
-          :
-          <button onClick={() => setIsRunning(true)} className="p-3 border">
-            Start
-          </button>
-        }
+        ) : (
+          <Button onClick={() => setIsRunning(true)}>Start</Button>
+        )}
       </div>
     </div>
   );

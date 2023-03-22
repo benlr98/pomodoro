@@ -5,8 +5,16 @@ import Timer from "./Timer";
 import TaskList from "./TaskList";
 
 export default function App() {
-  const [timeLeft, setTimeLeft] = useState(25 * 60);
-  const [isRunning, setIsRunning] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(7);
+  const [numberOfPomos, setNumberOfPomos] = useState(0);
+
+  function increaseDailyPomos() {
+    setNumberOfPomos(prevNum => prevNum + 1);
+  }
+
+  function resetDailyPomodoros() {
+    setNumberOfPomos(0);
+  }
 
   return (
     <div className="max-w-[620px] mx-auto px-3">
@@ -14,10 +22,10 @@ export default function App() {
 
       {/* progressBar */}
 
-      <Timer timeLeft={timeLeft} isRunning={isRunning} setTimeLeft={setTimeLeft} setIsRunning={setIsRunning} />
+      <Timer timeLeft={timeLeft} setTimeLeft={setTimeLeft} increaseDailyPomos={increaseDailyPomos} />
 
       <div className="text-center my-5">
-        <span># of Pomodoros</span>
+        <h3>Today's pomodoro count: {numberOfPomos}</h3>
         <h2>Current Task</h2>
       </div>
 
