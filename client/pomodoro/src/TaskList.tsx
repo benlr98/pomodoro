@@ -137,12 +137,13 @@ export function Task({ id, title, setEditTaskId, isSelected, setSelectedTask }: 
 interface TaskListProps {
   tasks: TaskType[],
   setTasks: Function,
+  selectedTask: string,
+  setSelectedTask: Function,
 }
-export default function TaskList({ tasks, setTasks }: TaskListProps) {
-  // const [tasks, setTasks] = useState<TaskType[]>([]);
+export default function TaskList({ tasks, setTasks, selectedTask, setSelectedTask }: TaskListProps) {
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [editTaskId, setEditTaskId] = useState("");
-  const [selectedTask, setSelectedTask] = useState("");
+  // const [selectedTask, setSelectedTask] = useState("");
 
   return (
     <div className="flex flex-col gap-3">
