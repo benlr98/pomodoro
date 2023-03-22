@@ -1,10 +1,13 @@
 import { useState, useRef } from "react";
 
+import { TaskType } from "./types";
+
 import Navbar from "./Navbar";
 import Timer from "./Timer";
 import TaskList from "./TaskList";
 
 export default function App() {
+  const [tasks, setTasks] = useState<TaskType[]>([]);
   const [timeLeft, setTimeLeft] = useState(7);
   const [numberOfPomos, setNumberOfPomos] = useState(0);
 
@@ -29,7 +32,7 @@ export default function App() {
         <h2>Current Task</h2>
       </div>
 
-      <TaskList />
+      <TaskList tasks={tasks} setTasks={setTasks}/>
 
       <div className="p-5 mt-10 border text-center">Stats finish</div>
     </div>

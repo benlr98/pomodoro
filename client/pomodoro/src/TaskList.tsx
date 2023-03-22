@@ -2,22 +2,9 @@ import { useState, useRef } from "react";
 import { useOnClickOutside } from "./hooks/useOnClickOutside";
 import { v4 as uuidv4 } from "uuid";
 
-import Button from "./components/Button";
+import { TaskType } from "./types"
 
-type TaskType = {
-  _id?: string;
-  actPomodoro?: number;
-  done?: boolean;
-  id: string;
-  userId?: string;
-  title: string;
-  estPomodoro?: number;
-  order?: number;
-  note?: string;
-  projectName?: string;
-  created?: Date; // handled by database
-  __v?: number; // handled by database
-};
+import Button from "./components/Button";
 
 interface TaskFormProps {
   editTaskId?: string;
@@ -147,8 +134,12 @@ export function Task({ id, title, setEditTaskId, isSelected, setSelectedTask }: 
   );
 }
 
-export default function TaskList() {
-  const [tasks, setTasks] = useState<TaskType[]>([]);
+interface TaskListProps {
+  tasks: TaskType[],
+  setTasks: Function,
+}
+export default function TaskList({ tasks, setTasks }: TaskListProps) {
+  // const [tasks, setTasks] = useState<TaskType[]>([]);
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [editTaskId, setEditTaskId] = useState("");
   const [selectedTask, setSelectedTask] = useState("");
