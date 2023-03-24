@@ -1,16 +1,28 @@
 import { useState, useRef } from "react";
 
-import { TaskType } from "./types";
+import { TaskType, SettingsType } from "./types";
 
 import Navbar from "./Navbar";
 import Timer from "./Timer";
 import TaskList from "./TaskList";
+import Settings from "./Settings";
+
+let defaultSettings: SettingsType = {
+  timer: {
+    pomodoro: 7,
+    shortBreak: 3,
+    longBreak: 5,
+  }
+}
 
 export default function App() {
   const [tasks, setTasks] = useState<TaskType[]>([]);
   const [selectedTask, setSelectedTask] = useState("");
-  const [timeLeft, setTimeLeft] = useState(7);
   const [numberOfPomos, setNumberOfPomos] = useState(0);
+  const [showSettings, setShowSettings] = useState(false);
+  const [settings, setSettings] = useState(defaultSettings);
+  const [timeUsed, setTimeUsed] = useState(0)
+
 
 
   const [selectedTaskObject] = tasks.filter((task) => selectedTask === task.id);
@@ -25,13 +37,17 @@ export default function App() {
 
   return (
     <div className="max-w-[620px] mx-auto px-3">
-      <Navbar />
+      <Navbar setShowSettings={setShowSettings} />
+      
+      <Settings showSettings={showSettings} setShowSettings={setShowSettings} settings={settings} setSettings={setSettings} />
 
       {/* progressBar */}
 
+
       <Timer
-        timeLeft={timeLeft}
-        setTimeLeft={setTimeLeft}
+        timeUsed={timeUsed}
+        setTimeUsed={setTimeUsed}
+        timeSettings={settings.timer}
         increaseDailyPomos={increaseDailyPomos}
       />
 

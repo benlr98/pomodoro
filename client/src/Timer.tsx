@@ -3,23 +3,20 @@ import { useInterval } from "./hooks/useInterval";
 import Button from "./components/Button";
 
 interface TimerProps {
-  timeLeft: number;
-  setTimeLeft: Function;
+  timeSettings: { pomodoro: number, shortBreak: number, longBreak: number}
+  timeUsed: number,
+  setTimeUsed: Function,
   increaseDailyPomos: Function;
 }
-export default function Timer({ timeLeft,  setTimeLeft, increaseDailyPomos} : TimerProps) {
+export default function Timer({ timeSettings, increaseDailyPomos, timeUsed, setTimeUsed} : TimerProps) {
   const [isRunning, setIsRunning] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(7);
   const formattedTime = formatTime(timeLeft);
-
-  const timeSettings = {
-    pomodoro: 7,
-    shortBreak: 3,
-    longBreak: 5,
-  }
 
   useInterval(
     () => {
       setTimeLeft(timeLeft - 1);
+      setTimeUsed(timeUsed + 1);
       if (timeLeft === 0) {
         handleTimerEnd();
       }
@@ -38,6 +35,7 @@ export default function Timer({ timeLeft,  setTimeLeft, increaseDailyPomos} : Ti
     //TODO: handle whether short break or long break
     // handleResetTimer()
     setTimeLeft(timeSettings.pomodoro)
+    setTimeUsed(0);
 
     alert("Time has ended!")
   }

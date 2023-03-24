@@ -14,3 +14,11 @@ export type TaskType = {
   created?: Date; // handled by database
   __v?: number; // handled by database
 };
+
+export type SettingsType = {
+  timer: {
+    pomodoro: number;
+    shortBreak: number;
+    longBreak: number;
+  };
+};
