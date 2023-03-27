@@ -118,12 +118,12 @@ interface TaskProps {
   title: string;
   setEditTaskId: Function;
   isSelected: boolean;
-  setSelectedTask: Function;
+  setSelectedTaskId: Function;
 }
-export function Task({ id, title, setEditTaskId, isSelected, setSelectedTask }: TaskProps) {
+export function Task({ id, title, setEditTaskId, isSelected, setSelectedTaskId }: TaskProps) {
   return (
     <div
-      onClick={() => setSelectedTask(id)}
+      onClick={() => setSelectedTaskId(id)}
       className={`p-5 flex justify-between items-center border border-black ${isSelected ? "border-4" : ""}`}
     >
       <span>{title}</span>
@@ -137,19 +137,19 @@ export function Task({ id, title, setEditTaskId, isSelected, setSelectedTask }: 
 interface TaskListProps {
   tasks: TaskType[],
   setTasks: Function,
-  selectedTask: string,
-  setSelectedTask: Function,
+  selectedTaskId: string,
+  setSelectedTaskId: Function,
 }
-export default function TaskList({ tasks, setTasks, selectedTask, setSelectedTask }: TaskListProps) {
+export default function TaskList({ tasks, setTasks, selectedTaskId, setSelectedTaskId }: TaskListProps) {
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [editTaskId, setEditTaskId] = useState("");
-  // const [selectedTask, setSelectedTask] = useState("");
+  // const [selectedTaskId, setSelectedTaskId] = useState("");
 
   return (
     <div className="flex flex-col gap-3">
       {tasks.map((task) => {
         // check to see if this task is selected
-        const isSelected = task.id === selectedTask;
+        const isSelected = task.id === selectedTaskId;
         if (editTaskId === task.id) {
           return (
             <TaskForm
@@ -166,7 +166,7 @@ export default function TaskList({ tasks, setTasks, selectedTask, setSelectedTas
           return (
             <Task
               key={task.id}
-              setSelectedTask={setSelectedTask}
+              setSelectedTaskId={setSelectedTaskId}
               id={task.id}
               title={task.title}
               isSelected={isSelected}

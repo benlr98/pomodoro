@@ -1,30 +1,41 @@
 import { useState, useMemo } from "react";
 import { useInterval } from "./hooks/useInterval";
+
+import { SettingsType } from "./types";
+
 import Button from "./components/Button";
 
 interface TimerProps {
-  timeSettings: { pomodoro: number, shortBreak: number, longBreak: number}
+  settings: SettingsType;
   timeUsed: number,
   setTimeUsed: Function,
-  increaseDailyPomos: Function;
+  increaseDailyPomos: Function,
+  updateDetailReport: Function,
 }
-export default function Timer({ timeSettings, increaseDailyPomos, timeUsed, setTimeUsed} : TimerProps) {
+export default function Timer({ settings, increaseDailyPomos, timeUsed, setTimeUsed, updateDetailReport } : TimerProps) {
   const [isRunning, setIsRunning] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(7);
+  const [timeLeft, setTimeLeft] = useState(settings.timer.pomodoro);
   const formattedTime = formatTime(timeLeft);
+
+  const timeSettings = settings.timer;
+
+  const updateReportFrequency = 59;
 
   useInterval(
     () => {
       setTimeLeft(timeLeft - 1);
       setTimeUsed(timeUsed + 1);
+      if(timeUsed % updateReportFrequency === 0) {
+        updateDetailReport();
+      }
       if (timeLeft === 0) {
         handleTimerEnd();
       }
+
+
     },
     isRunning ? 1000 : null
   );
-
-  
 
   function handleTimerEnd() {
     setIsRunning(false);
