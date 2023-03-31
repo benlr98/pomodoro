@@ -28,14 +28,17 @@ export default function Timer({ settings, increaseDailyPomos, timeUsed, setTimeU
 
   const timeSettings = settings.timer;
 
-  const updateReportFrequency = 59;
+  const updateReportFrequency = 5;
 
   useInterval(
     () => {
       setTimeLeft(timeLeft - 1);
-      setTimeUsed(timeUsed + 1);
-      if(timeUsed % updateReportFrequency === 0) {
-        updateDetailReport();
+      // this makes sure that break time doesn't add to reporting
+      if (selectedTimer === "pomodoro" && isRunning) {
+        setTimeUsed(timeUsed + 1);
+        if(timeUsed % updateReportFrequency === 0) {
+          updateDetailReport();
+        }
       }
       if (timeLeft === 0) {
         handleTimerEnd();
@@ -49,13 +52,13 @@ export default function Timer({ settings, increaseDailyPomos, timeUsed, setTimeU
   function handleTimerEnd() {
     setIsRunning(false);
 
-    // TODO: only increase Pomos if pomodoro timer ends, not breaks 
-    increaseDailyPomos();
+    if (selectedTimer === "pomodoro") {
+      increaseDailyPomos();
+    }
 
     //TODO: handle whether short break or long break
     // handleResetTimer()
     setTimeLeft(timeSettings[selectedTimer])
-    setTimeUsed(0);
 
     alert("Time has ended!")
   }
