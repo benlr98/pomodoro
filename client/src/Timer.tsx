@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useInterval } from "./hooks/useInterval";
 
 import { SettingsType } from "./types";
@@ -13,9 +13,18 @@ interface TimerProps {
   updateDetailReport: Function,
 }
 export default function Timer({ settings, increaseDailyPomos, timeUsed, setTimeUsed, updateDetailReport } : TimerProps) {
+  const [selectedTimer, setSelectedTimer] = useState<"pomodoro" | "shortBreak" | "longBreak">("pomodoro");
   const [isRunning, setIsRunning] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(settings.timer.pomodoro);
+  const [timeLeft, setTimeLeft] = useState(settings.timer[selectedTimer]);
   const formattedTime = formatTime(timeLeft);
+
+  // when settings change, make sure timeLeft is updated 
+  useEffect(() => {
+    let isPositive = (settings.timer[selectedTimer] - timeUsed) > 0;
+    if (isPositive) {
+      setTimeLeft(settings.timer[selectedTimer] - timeUsed);
+    }
+  }, [settings]);
 
   const timeSettings = settings.timer;
 
@@ -45,7 +54,7 @@ export default function Timer({ settings, increaseDailyPomos, timeUsed, setTimeU
 
     //TODO: handle whether short break or long break
     // handleResetTimer()
-    setTimeLeft(timeSettings.pomodoro)
+    setTimeLeft(timeSettings[selectedTimer])
     setTimeUsed(0);
 
     alert("Time has ended!")
@@ -83,24 +92,27 @@ export default function Timer({ settings, increaseDailyPomos, timeUsed, setTimeU
       <div className="mb-3 flex justify-center gap-2">
         <button
           onClick={() => {
+            setSelectedTimer("pomodoro");
             setTimeLeft(timeSettings.pomodoro);
             setIsRunning(false);
           }}
           className="p-3 border"
-        >
+          >
           Pomodoro
         </button>
         <button
           onClick={() => {
+            setSelectedTimer("shortBreak");
             setTimeLeft(timeSettings.shortBreak);
             setIsRunning(false);
           }}
           className="p-3 border"
-        >
+          >
           Short Break
         </button>
         <button
           onClick={() => {
+            setSelectedTimer("longBreak");
             setTimeLeft(timeSettings.longBreak);
             setIsRunning(false);
           }}
