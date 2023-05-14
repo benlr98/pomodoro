@@ -7,7 +7,8 @@ import bodyParser from "body-parser";
 import connectToDB from "./db.js";
 
 // import routes 
-import usersRoutes from './routes/userRoutes.js'
+import userRoutes from './routes/userRoutes.js'
+import taskRoutes from './routes/taskRoutes.js'
 import User from "./models/User.js";
 
 // TODO: import error handler util 
@@ -23,23 +24,8 @@ app.use(bodyParser.json())
 connectToDB();
 
 // use routes 
-app.use('/users', usersRoutes)
-
-async function findAllUsers() {
-
-  // Find a user by their ID
-  const users = await User.find();
-  
-  // Log the user's details to the console
-  return users
-  
-}
-
-// Define your app routes here
-app.get("/", async (req, res) => {
-  const users = await findAllUsers();
-  res.send(users)
-});
+app.use('/users', userRoutes)
+app.use('/tasks', taskRoutes)
 
 // Start the app and listen on port 3000
 const port = 3000;

@@ -3,10 +3,7 @@ const router = Router();
 import { 
     getAllUsers, 
     getUserByName, 
-    createUser, 
-    // getUserById, 
-    // updateUser, 
-    // deleteUser 
+    createUser
 } from '../controllers/userController.js';
 
 // Route for getting all users
