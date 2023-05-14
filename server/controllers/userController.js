@@ -26,11 +26,9 @@ export async function getUserByName(req, res) {
 
 export async function createUser(req, res) {
   try {
-    // const user = new User(req.body);
-    // await user.save();
-    // res.json(user);
-    console.log(req.method)
-    res.json(req.body)
+    const user = new User(req.body);
+    await user.save();
+    res.json(user);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
