@@ -2,9 +2,9 @@ import { useState, useRef } from "react";
 
 import { TaskType, SettingsType } from "./types";
 
-import Navbar from "./Navbar";
-import Timer from "./Timer";
-import TaskList from "./TaskList";
+import Navbar from "./components/Navbar";
+import Timer from "./components/Timer";
+import TaskList from "./components/TaskList";
 import Settings from "./Settings";
 
 let defaultSettings: SettingsType = {

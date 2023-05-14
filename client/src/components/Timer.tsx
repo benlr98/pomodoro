@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { useInterval } from "./hooks/useInterval";
+import { useInterval } from "../hooks/useInterval";
 
-import { SettingsType } from "./types";
+import { SettingsType } from "../types";
 
-import Button from "./components/Button";
+import Button from "./shared/Button";
 
 interface TimerProps {
   settings: SettingsType;

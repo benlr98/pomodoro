@@ -1,10 +1,10 @@
 import { useState, useRef } from "react";
-import { useOnClickOutside } from "./hooks/useOnClickOutside";
+import { useOnClickOutside } from "../hooks/useOnClickOutside";
 import { v4 as uuidv4 } from "uuid";
 
-import { TaskType } from "./types"
+import { TaskType } from "../types"
 
-import Button from "./components/Button";
+import Button from "./shared/Button";
 
 interface TaskFormProps {
   editTaskId?: string;

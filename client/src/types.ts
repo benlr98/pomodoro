@@ -1,6 +1,6 @@
 
 
-export type TaskType = {
+export interface TaskType  {
   _id?: string,
   actPomodoro?: number,
   done?: boolean,
@@ -15,7 +15,7 @@ export type TaskType = {
   __v?: number, // handled by database
 };
 
-export type SettingsType = {
+export interface SettingsType  {
   timer: {
     pomodoro: number,
     shortBreak: number,
