@@ -2,6 +2,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
+import cors from "cors";
 
 // import database connection 
 import connectToDB from "./db.js";
@@ -17,6 +18,10 @@ import User from "./models/User.js";
 const app = express();
 
 // use middlewares
+app.use(cors({
+  origin: "http://localhost:5173",
+  optionsSuccessStatus: 200
+}));
 app.use(bodyParser.json())
 
 

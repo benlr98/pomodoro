@@ -1,6 +1,8 @@
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { TaskType, SettingsType } from "./types";
+
+import { getAllTasks } from "./api/Task";
 
 import Navbar from "./components/Navbar";
 import Timer from "./components/Timer";
@@ -23,10 +25,12 @@ export default function App() {
   const [settings, setSettings] = useState(defaultSettings);
   const [timeUsed, setTimeUsed] = useState(0)
   const [detailReport, setDetailReport] = useState<{}[]>([])
-
-
-
   const [selectedTaskObject] = tasks.filter((task) => selectedTaskId === task.id);
+
+  useEffect(() => {
+    getAllTasks();
+  }, [])
+
 
   function increaseDailyPomos() {
     setDailyPomos((prevNum) => prevNum + 1);
