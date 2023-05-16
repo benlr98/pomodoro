@@ -165,10 +165,10 @@ export default function TaskList({ tasks, setTasks, selectedTaskId, setSelectedT
         } else {
           return (
             <Task
-              key={task.id}
+              key={task._id}
               setSelectedTaskId={setSelectedTaskId}
-              id={task.id}
-              title={task.title}
+              id={task._id}
+              title={task.name}
               isSelected={isSelected}
               setEditTaskId={setEditTaskId}
             />

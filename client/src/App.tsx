@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 
 import { TaskType, SettingsType } from "./types";
 
-import { getAllTasks } from "./api/Task";
+import { getAllTasks } from "./api/apiTasks";
 
 import Navbar from "./components/Navbar";
 import Timer from "./components/Timer";
@@ -28,8 +28,17 @@ export default function App() {
   const [selectedTaskObject] = tasks.filter((task) => selectedTaskId === task.id);
 
   useEffect(() => {
-    getAllTasks();
-  }, [])
+    const getTasks = async () => {
+      try {
+        const data = await getAllTasks();
+        setTasks(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getTasks();
+  }, []);
 
 
   function increaseDailyPomos() {
