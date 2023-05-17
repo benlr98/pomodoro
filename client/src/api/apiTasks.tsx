@@ -13,3 +13,30 @@ export async function getAllTasks() {
     }
 }
 
+
+interface ITask {
+  title: string;
+  userId: string;
+  projectId: string;
+  estPomodoro?: number;
+  actPomodoro?: number;
+  createdAt?: Date;
+  notes?: string;
+  completed?: boolean;
+  priority?: number;
+  order?: number;
+}
+export async function createTask(taskData: ITask) {
+    try {
+        const response = await axios.post(
+            `${BASE_URL}/tasks/new`,
+            taskData
+        );
+        const tasks = await response.data;
+        
+        return tasks
+    } catch (error) {
+        console.log(error);
+    }
+}
+

@@ -13,8 +13,8 @@ export async function getAllTasks(req, res) {
 export async function createTask(req, res) {
     try {
         let newTask = new Task(req.body);
-        let saved = await newTask.save();
-        res.json(saved);
+        let savedTask = await newTask.save();
+        res.json(savedTask);
 
     } catch (error) {
         console.error(error);

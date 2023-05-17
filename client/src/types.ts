@@ -1,7 +1,7 @@
 
 
 export interface TaskType  {
-  _id?: string,
+  _id: string,
   actPomodoro?: number,
   done?: boolean,
   id: string,

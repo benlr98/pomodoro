@@ -1,6 +1,6 @@
-import { SettingsType } from "./types";
+import { SettingsType } from "../types";
 
-import Button from "./components/shared/Button";
+import Button from "./shared/Button";
 
 interface SettingsProps {
   showSettings: boolean;

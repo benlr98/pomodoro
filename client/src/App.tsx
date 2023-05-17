@@ -7,7 +7,7 @@ import { getAllTasks } from "./api/apiTasks";
 import Navbar from "./components/Navbar";
 import Timer from "./components/Timer";
 import TaskList from "./components/TaskList";
-import Settings from "./Settings";
+import Settings from "./components/Settings";
 
 let defaultSettings: SettingsType = {
   timer: {

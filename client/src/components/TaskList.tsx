@@ -3,6 +3,7 @@ import { useOnClickOutside } from "../hooks/useOnClickOutside";
 import { v4 as uuidv4 } from "uuid";
 
 import { TaskType } from "../types"
+import { createTask } from "../api/apiTasks";
 
 import Button from "./shared/Button";
 
@@ -18,7 +19,7 @@ export function TaskForm({ editTaskId, title, setShowForm, setTasks, tasks, remo
   const [taskTitle, setTaskTitle] = useState(title || "");
 
   // will be [] if no given taskId in handleSave params
-  const [editTask] = tasks.filter((task) => task.id === editTaskId);
+  const [editTask] = tasks.filter((task) => task._id === editTaskId);
 
   // handle canceling when clicking outside the form element
   const taskForm = useRef<HTMLFormElement>(null);
@@ -39,7 +40,7 @@ export function TaskForm({ editTaskId, title, setShowForm, setTasks, tasks, remo
   }
 
   function handleDelete(taskId: string) {
-    const updatedTaskList = tasks.filter((task) => task.id !== taskId);
+    const updatedTaskList = tasks.filter((task) => task._id !== taskId);
     setTasks(updatedTaskList);
     // if this is an editForm, clear taskId from editForm
     removeEditForm ? removeEditForm() : "";
@@ -59,7 +60,7 @@ export function TaskForm({ editTaskId, title, setShowForm, setTasks, tasks, remo
     if (editTask) {
       // update and post edited task
       const updatedTaskList = tasks.map((task) => {
-        if (task.id === editTask.id) {
+        if (task._id === editTask._id) {
           return {
             ...task,
             title: taskTitle,
@@ -72,8 +73,23 @@ export function TaskForm({ editTaskId, title, setShowForm, setTasks, tasks, remo
       setShowForm(false);
       removeEditForm ? removeEditForm() : "";
     } else {
-      // add new task to taskList
-      setTasks((prevTasks: TaskType[]) => [...prevTasks, { title: taskTitle, id: uuidv4() }]);
+
+      // call create task api
+      const setNewTask = async () => {
+        const task = await createTask({
+          title: taskTitle,
+          userId: "64604ad71dd8a7dbbd6f4b51", // default "Ben" user for testing
+          projectId: "-1" // default "no project"
+        });
+
+        //TODO: add error checking
+
+        // set tasks with response data
+        setTasks((prevTasks: TaskType[]) => [...prevTasks, task]);
+      }
+      
+      // call async function to set task 
+      setNewTask()
     }
 
     // reset Form
@@ -114,11 +130,11 @@ export function TaskForm({ editTaskId, title, setShowForm, setTasks, tasks, remo
 }
 
 interface TaskProps {
-  id: string;
-  title: string;
-  setEditTaskId: Function;
-  isSelected: boolean;
-  setSelectedTaskId: Function;
+  id: string,
+  title: string,
+  setEditTaskId: Function,
+  isSelected: boolean,
+  setSelectedTaskId: Function,
 }
 export function Task({ id, title, setEditTaskId, isSelected, setSelectedTaskId }: TaskProps) {
   return (
@@ -149,12 +165,12 @@ export default function TaskList({ tasks, setTasks, selectedTaskId, setSelectedT
     <div className="flex flex-col gap-3">
       {tasks.map((task) => {
         // check to see if this task is selected
-        const isSelected = task.id === selectedTaskId;
-        if (editTaskId === task.id) {
+        const isSelected = task._id === selectedTaskId;
+        if (editTaskId === task._id) {
           return (
             <TaskForm
-              key={task.id}
-              editTaskId={task.id}
+              key={task._id}
+              editTaskId={task._id}
               title={task.title}
               setShowForm={setShowTaskForm}
               tasks={tasks}
@@ -168,7 +184,7 @@ export default function TaskList({ tasks, setTasks, selectedTaskId, setSelectedT
               key={task._id}
               setSelectedTaskId={setSelectedTaskId}
               id={task._id}
-              title={task.name}
+              title={task.title}
               isSelected={isSelected}
               setEditTaskId={setEditTaskId}
             />
