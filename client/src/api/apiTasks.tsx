@@ -33,7 +33,6 @@ export async function createTask(taskData: ITask) {
             taskData
         );
         const tasks = await response.data;
-        
         return tasks
     } catch (error) {
         console.log(error);

@@ -14,10 +14,14 @@ export async function createTask(req, res) {
     try {
         let newTask = new Task(req.body);
         let savedTask = await newTask.save();
-        res.json(savedTask);
+        fakeServerDelay(() => res.json(savedTask))
 
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' })
     }
 }
+
+const fakeServerDelay = (cb) => {
+  setTimeout(cb, 2000)
+} 
