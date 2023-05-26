@@ -39,3 +39,13 @@ export async function createTask(taskData: ITask) {
     }
 }
 
+export async function deleteTask(taskId: string) {
+    try {
+        const response = await axios.delete(`${BASE_URL}/tasks/${taskId}/delete`);
+        const deletedTask = response.data;
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
+

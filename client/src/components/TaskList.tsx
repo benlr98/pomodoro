@@ -3,7 +3,7 @@ import { useOnClickOutside } from "../hooks/useOnClickOutside";
 import { v4 as uuidv4 } from "uuid";
 
 import { TaskType } from "../types"
-import { createTask } from "../api/apiTasks";
+import { createTask, deleteTask } from "../api/apiTasks";
 
 import Button from "./shared/Button";
 
@@ -42,6 +42,10 @@ export function TaskForm({ editTaskId, title, setShowForm, setTasks, tasks, remo
   function handleDelete(taskId: string) {
     const updatedTaskList = tasks.filter((task) => task._id !== taskId);
     setTasks(updatedTaskList);
+
+    // TODO: error check task deletion 
+    deleteTask(taskId);
+
     // if this is an editForm, clear taskId from editForm
     removeEditForm ? removeEditForm() : "";
   }
