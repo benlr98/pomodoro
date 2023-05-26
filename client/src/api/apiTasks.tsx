@@ -1,4 +1,5 @@
 import axios from "axios";
+import { TaskType } from "../types";
 
 const BASE_URL = 'http://localhost:3000';
 
@@ -36,6 +37,21 @@ export async function createTask(taskData: ITask) {
         return tasks
     } catch (error) {
         console.log(error);
+    }
+}
+
+export async function updateTask(taskId: string, updateObject: object ): Promise<TaskType | { error: string}> {
+    try {
+        const response = await axios.put(
+            `${BASE_URL}/tasks/${taskId}/update`,
+            updateObject    
+        );
+        const updatedTask = response.data;
+        return updatedTask
+        
+    } catch (error) {
+        console.log(error)
+        return { error: "error" }
     }
 }
 

@@ -23,10 +23,11 @@ export async function createTask(req, res) {
 }
 
 export async function updateTask(req, res) {
+    let taskId = req.params.id;
+    let updates = req.body;
     try {
-        let newTask = new Task(req.body);
-        let savedTask = await newTask.save();
-        res.json(savedTask)
+        let updatedTask = await Task.findByIdAndUpdate(taskId, updates, { returnDocument: "after" });
+        res.json(updatedTask)
 
     } catch (error) {
         console.error(error);

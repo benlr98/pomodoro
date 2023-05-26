@@ -3,7 +3,7 @@ import { useOnClickOutside } from "../hooks/useOnClickOutside";
 import { v4 as uuidv4 } from "uuid";
 
 import { TaskType } from "../types"
-import { createTask, deleteTask } from "../api/apiTasks";
+import { createTask, updateTask, deleteTask } from "../api/apiTasks";
 
 import Button from "./shared/Button";
 
@@ -51,7 +51,7 @@ export function TaskForm({ editTaskId, title, setShowForm, setTasks, tasks, remo
   }
 
   // handle creating new task or editing existing task
-  function handleSave(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSave(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     // cancel adding task no given title
@@ -62,9 +62,14 @@ export function TaskForm({ editTaskId, title, setShowForm, setTasks, tasks, remo
 
     // if form includes an editTaskId, edit existing task
     if (editTask) {
+      // TODO: separate this function? 
+      let updatedTask = await updateTask(editTask._id, { title: taskTitle });
+
+
       // update and post edited task
       const updatedTaskList = tasks.map((task) => {
-        if (task._id === editTask._id) {
+        // TODO: handle if error 
+        if (task._id === updatedTask._id) {
           return {
             ...task,
             title: taskTitle,
