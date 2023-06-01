@@ -64,12 +64,14 @@ export function TaskForm({ editTaskId, title, setShowForm, setTasks, tasks, remo
     if (editTask) {
       // TODO: separate this function? 
       let updatedTask = await updateTask(editTask._id, { title: taskTitle });
-
+      if (!updatedTask) return alert('This task may have been deleted. Please refresh.')
 
       // update and post edited task
       const updatedTaskList = tasks.map((task) => {
+
+
         // TODO: handle if error 
-        if (task._id === updatedTask._id) {
+        if (updatedTask && task._id === updatedTask._id) {
           return {
             ...task,
             title: taskTitle,

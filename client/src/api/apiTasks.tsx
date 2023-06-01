@@ -40,18 +40,19 @@ export async function createTask(taskData: ITask) {
     }
 }
 
-export async function updateTask(taskId: string, updateObject: object ): Promise<TaskType | { error: string}> {
+export function updateTask(taskId: string, updateObject: object): Promise<TaskType>
+export async function updateTask(taskId: string, updateObject: object ) {
     try {
         const response = await axios.put(
             `${BASE_URL}/tasks/${taskId}/update`,
             updateObject    
         );
-        const updatedTask = response.data;
+        const updatedTask: TaskType = response.data;
         return updatedTask
         
     } catch (error) {
         console.log(error)
-        return { error: "error" }
+        return "error"
     }
 }
 
