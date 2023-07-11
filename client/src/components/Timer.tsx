@@ -24,7 +24,7 @@ export default function Timer({
   // how many seconds between updating report
   const updateReportFrequency = 5;
   let formattedTime = formatTime(seconds);
-  
+
   useEffect(() => {
     if (seconds === 0 && running) {
       if (selectedTimer === "pomodoro" && running) {
@@ -44,20 +44,19 @@ export default function Timer({
       }
     }, 1000);
 
-    return () => clearTimeout(timeout)
-
-  }, [seconds, running])
+    return () => clearTimeout(timeout);
+  }, [seconds, running]);
 
   function handleTimerEnd() {
     setRunning(false);
     if (selectedTimer === "pomodoro") {
       increaseDailyPomos();
     }
-    
+
     //TODO: handle whether short break or long break
     // handleResetTimer()
     setSeconds(settings.timer[selectedTimer]);
-    
+
     alert(`Time has ended! ${timeUsed}`);
   }
 
