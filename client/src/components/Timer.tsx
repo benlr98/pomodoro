@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useInterval } from "../hooks/useInterval";
 import { SettingsType } from "../types";
 import Button from "./shared/Button";
 
@@ -20,44 +19,45 @@ export default function Timer({
   const [selectedTimer, setSelectedTimer] = useState<
     "pomodoro" | "shortBreak" | "longBreak"
   >("pomodoro");
-  const [isRunning, setIsRunning] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(settings.timer[selectedTimer]);
+  const [running, setRunning] = useState(false);
+  const [seconds, setSeconds] = useState(settings.timer[selectedTimer]);
+  // how many seconds between updating report
   const updateReportFrequency = 5;
-  let formattedTime = formatTime(timeLeft);
-
-  useInterval(
-    () => {
-      let proxyTime = timeLeft;
-      setTimeLeft(proxyTime - 1);
-      // this makes sure that break time doesn't add to reporting
-      if (selectedTimer === "pomodoro" && isRunning) {
+  let formattedTime = formatTime(seconds);
+  
+  useEffect(() => {
+    if (seconds === 0 && running) {
+      if (selectedTimer === "pomodoro" && running) {
         setTimeUsed(timeUsed + 1);
         if (timeUsed % updateReportFrequency === 0) {
           updateDetailReport();
         }
       }
-      if (proxyTime === 3) {
-        setIsRunning(false);
-        handleTimerEnd();
+      handleTimerEnd();
+    } else if (running) {
+      // setBuzzer(false);
+    }
+
+    let timeout = setTimeout(() => {
+      if (running) {
+        setSeconds((prev) => prev - 1);
       }
-    },
-    isRunning ? 1000 : null
-  );
+    }, 1000);
 
-  
+    return () => clearTimeout(timeout)
 
+  }, [seconds, running])
 
   function handleTimerEnd() {
-    setIsRunning(false);
-
+    setRunning(false);
     if (selectedTimer === "pomodoro") {
       increaseDailyPomos();
     }
-
+    
     //TODO: handle whether short break or long break
     // handleResetTimer()
-    setTimeLeft(settings.timer[selectedTimer]);
-
+    setSeconds(settings.timer[selectedTimer]);
+    
     alert(`Time has ended! ${timeUsed}`);
   }
 
@@ -93,8 +93,8 @@ export default function Timer({
         <button
           onClick={() => {
             setSelectedTimer("pomodoro");
-            setTimeLeft(settings.timer.pomodoro);
-            setIsRunning(false);
+            setSeconds(settings.timer.pomodoro);
+            setRunning(false);
           }}
           className="p-3 border"
         >
@@ -103,8 +103,8 @@ export default function Timer({
         <button
           onClick={() => {
             setSelectedTimer("shortBreak");
-            setTimeLeft(settings.timer.shortBreak);
-            setIsRunning(false);
+            setSeconds(settings.timer.shortBreak);
+            setRunning(false);
           }}
           className="p-3 border"
         >
@@ -113,8 +113,8 @@ export default function Timer({
         <button
           onClick={() => {
             setSelectedTimer("longBreak");
-            setTimeLeft(settings.timer.longBreak);
-            setIsRunning(false);
+            setSeconds(settings.timer.longBreak);
+            setRunning(false);
           }}
           className="p-3 border"
         >
@@ -125,13 +125,13 @@ export default function Timer({
         {formattedTime?.min}:{formattedTime?.sec}
       </h1>
       <div className="flex justify-center gap-3">
-        {isRunning ? (
+        {running ? (
           <>
-            <Button onClick={() => setIsRunning(false)}>Pause</Button>
+            <Button onClick={() => setRunning(false)}>Pause</Button>
             <Button onClick={handleSkipToEnd}>Skip To End</Button>
           </>
         ) : (
-          <Button onClick={() => setIsRunning(true)}>Start</Button>
+          <Button onClick={() => setRunning(true)}>Start</Button>
         )}
       </div>
     </div>

@@ -10,8 +10,9 @@ import TaskList from "./components/TaskList";
 import Settings from "./components/Settings";
 
 let defaultSettings: SettingsType = {
+  // in seconds
   timer: {
-    pomodoro: 30,
+    pomodoro: 60,
     shortBreak: 10,
     longBreak: 15,
   }
