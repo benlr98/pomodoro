@@ -11,9 +11,9 @@ import Settings from "./components/Settings";
 
 let defaultSettings: SettingsType = {
   timer: {
-    pomodoro: 7,
-    shortBreak: 3,
-    longBreak: 5,
+    pomodoro: 30,
+    shortBreak: 10,
+    longBreak: 15,
   }
 }
 

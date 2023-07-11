@@ -18,11 +18,13 @@ import User from "./models/User.js";
 const app = express();
 
 // use middlewares
+//cors
 app.use(cors({
   origin: "http://localhost:5173",
   optionsSuccessStatus: 200
 }));
-app.use(bodyParser.json())
+//body-parser
+app.use(bodyParser.json());
 
 
 // connect to DB
@@ -32,8 +34,20 @@ connectToDB();
 app.use('/users', userRoutes)
 app.use('/tasks', taskRoutes)
 
+// const errorResponder = (err, req, res, next) => {
+//   // err.statusMessage = `Test error message.` // detailed error message
+//   err.statusCode = 300 // error code for responding to client
+//   res.header("Content-Type", 'application/json')
+//   res.status(err.statusCode).send(JSON.stringify(err, null, 4)) // pretty print
+// }
+// app.use(errorResponder);
+
 // Start the app and listen on port 3000
 const port = 3000;
 const server = app.listen(port, () => {
   console.log(`App is running on port ${port}`);
 });
+
+// const invalidPathHandler = (req, res, next) => {
+//   res.redirect('/error')
+// }
