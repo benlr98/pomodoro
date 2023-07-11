@@ -54,11 +54,11 @@ export default function App() {
     let today = new Date().toISOString().slice(0,10); // ie. 2023-03-24
     let detailReportItem: { id: string; title: string; date: string } = { id: "NO_TASK", title: "NO_TASK", date: today };
     // get task details
-    let [ task ] = tasks.filter(task => task.id === taskId);
+    let [ task ] = tasks.filter(task => task._id === taskId);
     // create an object with taskID, taskName, project, date, minutes
     if (task) {
       detailReportItem = {
-        id: task.id,
+        id: task._id,
         title: task.title,
         date: today
       }
