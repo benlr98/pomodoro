@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from "react";
 import { TaskType, SettingsType } from "./types";
 
 import { getAllTasks } from "./api/apiTasks";
+import { createTracking } from "./api/apiTrackTime";
 
 import Navbar from "./components/Navbar";
 import Timer from "./components/Timer";
@@ -52,20 +53,19 @@ export default function App() {
 
   function updateDetailReport(taskId: string) {
     let today = new Date().toISOString().slice(0,10); // ie. 2023-03-24
-    let detailReportItem: { id: string; title: string; date: string } = { id: "NO_TASK", title: "NO_TASK", date: today };
+    let defaultItem: { taskId: string; userId: string | undefined; projectId: string }= {taskId: "", userId: "", projectId: ""};
     // get task details
-    let [ task ] = tasks.filter(task => task.id === taskId);
+    let [ task ] = tasks.filter(task => task._id === taskId);
     // create an object with taskID, taskName, project, date, minutes
     if (task) {
-      detailReportItem = {
-        id: task.id,
-        title: task.title,
-        date: today
+      defaultItem = {
+        taskId: task._id,
+        userId: task.userId,
+        projectId: "-1"
       }
     }
 
-    setDetailReport((prevDetail) => [...prevDetail, detailReportItem])
-    console.log(detailReport);
+    createTracking(defaultItem.taskId, defaultItem.userId, defaultItem.projectId)
   }
 
 

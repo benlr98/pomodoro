@@ -5,7 +5,7 @@ import Button from "./shared/Button";
 interface TimerProps {
   settings: SettingsType;
   timeUsed: number;
-  setTimeUsed: Function;
+  setTimeUsed: React.Dispatch<React.SetStateAction<number>>;
   increaseDailyPomos: Function;
   updateDetailReport: Function;
 }
@@ -21,21 +21,18 @@ export default function Timer({
   >("pomodoro");
   const [running, setRunning] = useState(false);
   const [seconds, setSeconds] = useState(settings.timer[selectedTimer]);
-  // how many seconds between updating report
-  const updateReportFrequency = 5;
+  // number of seconds between sending time_tracking report
+  const updateReportFrequency = 60;
   let formattedTime = formatTime(seconds);
 
   useEffect(() => {
     if (seconds === 0 && running) {
-      if (selectedTimer === "pomodoro" && running) {
-        setTimeUsed(timeUsed + 1);
-        if (timeUsed % updateReportFrequency === 0) {
-          updateDetailReport();
-        }
-      }
       handleTimerEnd();
-    } else if (running) {
-      // setBuzzer(false);
+    } else if (selectedTimer === "pomodoro" && running) {
+      setTimeUsed((prev) => prev + 1);
+      if (timeUsed % updateReportFrequency === 0) {
+        updateDetailReport();
+      }
     }
 
     let timeout = setTimeout(() => {

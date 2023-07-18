@@ -10,7 +10,8 @@ import connectToDB from "./db.js";
 // import routes 
 import userRoutes from './routes/userRoutes.js'
 import taskRoutes from './routes/taskRoutes.js'
-import User from "./models/User.js";
+import trackingRoutes from './routes/trackingRoutes.js'
+// import User from "./models/User.js";
 
 // TODO: import error handler util 
 
@@ -33,6 +34,7 @@ connectToDB();
 // use routes 
 app.use('/users', userRoutes)
 app.use('/tasks', taskRoutes)
+app.use('/tracking', trackingRoutes)
 
 // const errorResponder = (err, req, res, next) => {
 //   // err.statusMessage = `Test error message.` // detailed error message
