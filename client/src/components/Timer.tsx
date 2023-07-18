@@ -21,8 +21,8 @@ export default function Timer({
   >("pomodoro");
   const [running, setRunning] = useState(false);
   const [seconds, setSeconds] = useState(settings.timer[selectedTimer]);
-  // how many seconds between updating report
-  const updateReportFrequency = 5;
+  // number of seconds between sending time_tracking report
+  const updateReportFrequency = 60;
   let formattedTime = formatTime(seconds);
 
   useEffect(() => {
